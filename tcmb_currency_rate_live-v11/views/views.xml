@@ -1,0 +1,172 @@
+<odoo>
+    <data>
+        <!-- Crm.Lead View -->
+        <record model="ir.ui.view" id="view_lead_additionals">
+            <field name="name">crm.lead.additions.form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="beklenen_ciro"/>
+                    <field name="beklenen_ciro_kuru"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Account.Invoice View-->
+        <record model="ir.ui.view" id="view_account_additionals">
+            <field name="name">account.invoice.additions.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@groups='base.group_multi_currency']" position="after">
+                    <field name="use_currency_rate" invisible="1"/>
+
+                    <field name="currency_rate_type_id" options="{'no_quick_create':True}"
+                           attrs="{'invisible':['|',('use_custom_rate', '=', True), ('use_currency_rate', '=', False)],
+                                                                'readonly':[('state', '!=', 'draft')]}"/>
+
+                    <label for="currency_rate" attrs="{'invisible': [('use_currency_rate', '!=', True)]}"/>
+                    <div attrs="{'invisible': [('use_currency_rate', '!=', True)]}">
+                        <span>
+                            <field name="currency_rate"
+                                   class="oe_inline"
+                                   nolabel="1"
+                                   attrs="{'invisible': True}"/>
+                            <field name="currency_inverse_rate"
+                                   nolabel="1"
+                                   class="oe_inline"
+                                   attrs="{'invisible': [('use_custom_rate','=',True)]}"/>
+                            <field name="custom_rate"
+                                   class="oe_inline"
+                                   nolabel="1"
+                                   attrs="{'invisible': [('use_custom_rate', '!=', True)]}"/>
+                        </span>
+                    </div>
+
+                    <field name="use_custom_rate" attrs="{'invisible':[('use_currency_rate', '!=', True)],
+                                                          'readonly':[('state', '!=', 'draft')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="amount_total_company_signed" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Account.Supplier.Invoice View-->
+        <record model="ir.ui.view" id="view_account_supplier_additionals">
+            <field name="name">account.invoice.supplier.additions.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//group[@class='oe_subtotal_footer oe_right']//field[@name='amount_total']"
+                       position="after">
+                    <field name="amount_total_company_signed" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='currency_id'][1]" position="after">
+                    <field name="use_currency_rate" invisible="1"/>
+
+                    <field name="currency_rate_type_id" options="{'no_quick_create':True}"
+                           attrs="{'invisible':['|',('use_custom_rate', '=', True), ('use_currency_rate', '=', False)],
+                                                                'readonly':[('state', '!=', 'draft')]}"/>
+
+                    <label for="currency_rate" attrs="{'invisible': [('use_currency_rate', '!=', True)]}"/>
+                    <div attrs="{'invisible': [('use_currency_rate', '!=', True)]}">
+                        <span>
+                            <field name="currency_rate"
+                                   class="oe_inline"
+                                   nolabel="1"
+                                   attrs="{'invisible': True}"/>
+                            <field name="currency_inverse_rate"
+                                   nolabel="1"
+                                   class="oe_inline"
+                                   attrs="{'invisible': [('use_custom_rate','=',True)]}"/>
+                            <field name="custom_rate"
+                                   class="oe_inline"
+                                   nolabel="1"
+                                   attrs="{'invisible': [('use_custom_rate', '!=', True)]}"/>
+                        </span>
+                    </div>
+
+                    <field name="use_custom_rate" attrs="{'invisible':[('use_currency_rate', '!=', True)],
+                                                          'readonly':[('state', '!=', 'draft')]}"/>
+                </xpath>
+
+
+            </field>
+        </record>
+
+        <!--Sale Order View-->
+        <record id="view_order_form_additionals" model="ir.ui.view">
+            <field name="name">sale.order.form.extended</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pricelist_id']" position="after">
+                    <field name="use_currency_rate" invisible="1"/>
+                    <field name="currency_rate_type_id" options="{'no_quick_create':True}"
+                           attrs="{'invisible':['|',('use_custom_rate', '=', True), ('use_currency_rate', '=', False)],'readonly':[('state', '!=', 'draft')]}"/>
+                    <field name="currency_rate"
+                           attrs="{'invisible': [('use_currency_rate', '=', False)],'readonly': [('use_custom_rate', '=', False)]}"/>
+                    <field name="use_custom_rate"
+                           attrs="{'invisible':[('use_currency_rate', '=', False)],'readonly':[('state', '!=', 'draft')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="company_currency_id" invisible="1"/>
+                    <field name="amount_total_company_signed" readonly="1" widget='monetary'/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Res.Currency View-->
+        <record model="ir.ui.view" id="view_currency_form_additional">
+            <field name="name">currency.extended.form</field>
+            <field name="model">res.currency</field>
+            <field name="inherit_id" ref="base.view_currency_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='rate']" position="replace">
+                    <label for="rate"/>
+                    <div class="address_format">
+                        <field name="rate" style="width: 33%"/>
+                        <span>=>&#032;</span>
+                        <field name="inverse_rate" style="width: 33%"/>
+                    </div>
+                    <label for="banknot_buying_rate"/>
+                    <div class="address_format">
+                        <field name="banknot_buying_rate" style="width: 33%"/>
+                        <span>=>&#032;</span>
+                        <field name="inverse_banknot_buying_rate" style="width: 33%"/>
+                    </div>
+                    <label for="forex_selling_rate"/>
+                    <div class="address_format">
+                        <field name="forex_selling_rate" style="width: 33%"/>
+                        <span>=>&#032;</span>
+                        <field name="inverse_forex_selling_rate" style="width: 33%"/>
+                    </div>
+                    <label for="forex_buying_rate"/>
+                    <div class="address_format">
+                        <field name="forex_buying_rate" style="width: 33%"/>
+                        <span>=>&#032;</span>
+                        <field name="inverse_forex_buying_rate" style="width: 33%"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Res.Currency.Rate View-->
+        <record model="ir.ui.view" id="view_currency_rate_tree_additional">
+            <field name="name">currency.rate.extended.tree</field>
+            <field name="model">res.currency.rate</field>
+            <field name="inherit_id" ref="base.view_currency_rate_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='rate']" position="before">
+                    <field name="forex_buying_rate"/>
+                    <field name="forex_selling_rate"/>
+                    <field name="banknot_buying_rate"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
