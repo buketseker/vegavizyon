@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+        <record id="company_currency_tree_view" model="ir.ui.view">
+            <field name="name">company.currency.tree.view</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total_signed']" position="after">
+                    <field name="amount_total_company_signed" sum="Toplam(Şirket Para Birimi)" widget="monetary"
+                           options="{'currency_field': 'company_currency_id'}"/>
+                </xpath>
+                <field name="residual_signed" position="after">
+                    <field name="residual_company_signed" sum="Ödenecek Miktar(Şirket Para Birimi)" />
+                </field>
+            </field>
+        </record>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="company_currency_form_view" model="ir.ui.view">
+            <field name="name">company.currency.form.view</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook/page[1]/group//field[@name='amount_total']" position="after">
+                    <field name="is_multi_currency" invisible="1"/>
+                    <field name="amount_total_company_signed"
+                           attrs="{'invisible': [('use_currency_rate', '!=', True)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

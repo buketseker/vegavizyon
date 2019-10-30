@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record model="currency.rate.update.service" id="ir_currency_rate_update_tcmb_service">
+            <field name="service">TCMB</field>
+            <field name="interval_type">days</field>
+            <field name="interval_number">1</field>
+            <field name="max_delta_days">4</field>
+            <field name="next_run" eval="datetime.now().date()"/>
+            <field name="currency_to_update" eval="[(6, 0, [ref('base.EUR'), ref('base.USD')])]"/>
+        </record>
+    </data>
+</odoo>

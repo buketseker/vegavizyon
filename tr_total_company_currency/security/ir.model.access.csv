@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_total_company_currency_total_company_currency,total_company_currency.total_company_currency,model_total_company_currency_total_company_currency,,1,0,0,0
